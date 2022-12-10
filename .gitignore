@@ -1,0 +1,6 @@
+.env
+.idea
+dist
+db.drawio
+db.json
+node_modules
