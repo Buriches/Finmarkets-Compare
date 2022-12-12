@@ -1,16 +1,10 @@
 const axios = require('axios')
 import {IStatusResponse} from "../types";
-import async from 'async';
-//const {Mutex} = require('async-mutex')
-
-//const mutex = new Mutex();
-
 
 const UniqueProductService = require('./UniqueProductService')
 const CategoryService = require('./CategoryService')
 const MarketProductService = require('./MarketProductService')
 const MarketService = require('./MarketService')
-const ProductCategoryService = require('./ProductCategoryService')
 
 class UploadService{
 
@@ -62,23 +56,8 @@ class UploadService{
 
   async updateSale(): Promise<IStatusResponse>{
     try {
-      const scope = this
-      async.waterfall([
-          function market (callback:any) {
-            const market = scope.decodeMarket('sale')
-            callback(null, market)
-          },
-          function (market:any, callback:any) {
-            const logic = scope.updateLogic(market)
-            callback(null, logic)
-          },
-      ], (error, result) => {
-        if (error) {
-          console.log(error)
-          return
-        }
-        console.log(result)
-      })
+      const market = this.decodeMarket('sale')
+      await this.updateLogic(market)
     } finally {
       console.log('Download is finished. Database is currently being loaded')
     }
@@ -108,40 +87,69 @@ class UploadService{
     // work with market table
     const market_id = await this.updateMarket(market)
     let i = 0
-    const step = 4000
+    const step = 2500
     let arr:any[] = []
     let total = 0
     while(true){
       i += step
       const res = await this.uploadQuery(step, i - step, market)
-      total += res.data.store.products.items.length
-      console.log(res.data.store.products.items.length + " total: " + total)
-      if (res.data.store.products.items.length === 0) {
+      total += res.data.data.store.products.items.length
+      console.log(res.data.data.store.products.items.length + " total: " + total)
+      if (res.data.data.store.products.items.length === 0) {
         break
       }
-      arr.push(...res.data.store.products.items)
+      arr.push(...res.data.data.store.products.items)
     }
     await this.addToBd(arr, market_id)
   }
 
   private async addToBd(arr:any[], market_id:number){
-    console.log(arr.length)
-    arr.forEach(async (item) => {
+    try {
+      console.log(arr.length)
 
-      // work with category
+      await this.insertAllCategories(arr)
+
+      await this.insertAllUniqueProducts(arr)
+
+      await this.insertAllMarketProduct(arr, market_id)
+
+      return
+    } catch (e) {
+      console.log(e)
+    } finally {
+      console.log('finished!')
+    }
+  }
+
+  private async insertAllCategories(arr:any[]){
+    try {
+      console.log('starts insert categories')
+      for (const item of arr){
+        if (!item.hierarchyPath) continue
+        for (const category of item.hierarchyPath)
+          await this.updateCategory(category.name, category.slug)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  private async insertAllUniqueProducts(arr:any[]) {
+    console.log('starts insert unique')
+    for (const item of arr){
       const getArrCategories = async () => {
         let categories:any[] = []
         if(item.hierarchyPath !== null && item.hierarchyPath !== undefined){
           for (let i = 0; i < item.hierarchyPath.length; i++){
-            categories = [...categories, await this.updateCategory(item.hierarchyPath[i].name, item.hierarchyPath[i].slug)]
+            if (item.hierarchyPath[i].name)
+            categories.push(this.localCategories.find(local => local.name === item.hierarchyPath[i].name && local.path === item.hierarchyPath[i].slug)?.category_id)
           }
         }else{
           return []
         }
+
         return categories
       }
 
-      // work with product
       const product = {
         name: item.name,
         for_adults: item.isAgeLimitedByAlcohol,
@@ -151,9 +159,14 @@ class UploadService{
         categories: await getArrCategories()
       }
 
-      const good_id = await this.updateUniqueProducts(product)
+      await this.updateUniqueProducts(product)
+    }
+  }
 
-
+  private async insertAllMarketProduct(arr:any[], market_id:number){
+    console.log('starts insert market-products')
+    for (const item of arr){
+      const good_id = this.localUniqueProducts.find(local => local.name === item.name && local.path === item.slug)?.good_id
       const body:{market_id: number, good_id: number | undefined, price: number, price_unit: string, price_compare: number, compare_unit: string} = {
         market_id: market_id,
         good_id: good_id,
@@ -163,10 +176,8 @@ class UploadService{
         compare_unit: item.comparisonUnit
       }
       await this.updateMarketProduct(body)
-    })
+    }
   }
-
-
 
   private async updateMarket(market:string|number){
 
@@ -177,31 +188,34 @@ class UploadService{
   }
 
   private async updateUniqueProducts(product: {name: string, for_adults: boolean, path: string, brand: string, img: string, categories: any[]}){
-    //if(this.localUniqueProducts.find(item => item.name = product.name))
-    //  return this.localUniqueProducts.find(item => item.name = product.name)?.good_id
-    const query = await UniqueProductService.getOneByName(product.name)
+    if (this.localUniqueProducts.find(item => item.name === product.name && item.path === product.path)){
+      return this.localUniqueProducts.find(item => item.name === product.name && item.path === product.path)?.good_id
+    }
+
+    const query = await UniqueProductService.getOneByNameAndPath(product.name, product.path)
     if (query.response?.good_id) {
       this.localUniqueProducts.push(query.response)
-      return this.localUniqueProducts.find(item => item.name = product.name)?.good_id
+      return this.localUniqueProducts.find(item => item.name === product.name && item.path === product.path)?.good_id
     }
 
     //create new unique product
     const createUniqueProduct = (await UniqueProductService.create(product)).response
     this.localUniqueProducts.push(createUniqueProduct)
-    //console.log(this.localUniqueProducts)
-    return this.localUniqueProducts.find(item => item.name = product.name)?.good_id
+    return this.localUniqueProducts.find(item => item.name === product.name && item.path === product.path)?.good_id
   }
 
   private async updateCategory(name:string, path:string){
-    //const release = await mutex.acquire();
+
     try {
-      if (this.localCategories.find(item => item.name = name))
-        return this.localCategories.find(item => item.name = name)?.category_id
-      const query = await CategoryService.getOneByName(name)
+      if (this.localCategories.find(item => item.name === name && item.path === path)){
+        return this.localCategories.find(item => item.name === name && item.path === path)?.category_id
+      }
+
+      const query = await CategoryService.getOneByNameAndPath(name, path)
+
       if (query.response?.category_id) {
         this.localCategories.push(query.response)
-
-        return this.localCategories.find(item => item.name = name)?.category_id
+        return this.localCategories.find(item => item.name === name && item.path === path)?.category_id
       }
       const body = {
         name: name,
@@ -211,41 +225,23 @@ class UploadService{
       //create new category
 
       const createCategory = (await CategoryService.create(body)).response
+
       this.localCategories.push(createCategory)
-      return this.localCategories.find(item => item.name = name)?.category_id
+      return this.localCategories.find(item => item.name === name && item.path === path)?.category_id
     } finally {
-      //release()
     }
   }
 
   private async updateMarketProduct(body:{market_id: number, good_id: number | undefined, price: number, price_unit: string, price_compare: number, compare_unit: string}){
 
     const query = await MarketProductService.searchByProductAndMarket(body)
-    if (query?.market_product_id) {
-      //console.log(query)
-      //console.log(body)
-      return
-    }
+    if (query?.market_product_id) return
+
     return (await MarketProductService.create(body)).response
   }
 
-  // private async updateProductCategory(good_id:number, category_id:number){
-  //   const query = await ProductCategoryService.getRelation({"good_id": good_id, "category_id": category_id})
-  //   if (query?.products_category_id) return
-  //   const body = {
-  //     good_id: good_id,
-  //     category_id: category_id
-  //   }
-  //
-  //   return (await ProductCategoryService.create(body)).response.product_category_id
-  // }F
-
   async uploadQuery(limit:number, from:number, market:string|number){
-    if (from > 100) return {data: {store: {products: {items :{length: 0}}}}}
-    const res = await axios.get(' http://localhost:3000/data')
-    //res.data.store.products.items.length = 2500
-    return res
-    //return await axios.get(this.queryForDownloadDataBase(limit, from, market))
+    return await axios.get(this.queryForDownloadDataBase(limit, from, market))
   }
 
   queryForDownloadDataBase(limit:number, from:number, market:string|number){

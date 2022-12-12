@@ -13,11 +13,11 @@ class CategoryService implements ICategoryService{
     //checking if this store is already in our database
     let duplicate = false
     const all = (await this.getAll()).response
-    all.forEach((item:{name: string})=>{
-      if (item.name === body.name) {
+    for (const item of all){
+      if (item.name === body.name && item.path === body.path) {
         duplicate = true
       }
-    })
+    }
     if (duplicate) return {status: 404, response: 'This category is already in db'}
 
     //adding a new category
@@ -55,6 +55,11 @@ class CategoryService implements ICategoryService{
 
   async getOneByName(name: string): Promise<IStatusResponse>{
     const query = await db.query('select * from category where name = $1', [name])
+    return {status: 200, response: query.rows[0]}
+  }
+
+  async getOneByNameAndPath(name: string, path:string): Promise<IStatusResponse>{
+    const query = await db.query('select * from category where name = $1 and path = $2', [name, path])
     return {status: 200, response: query.rows[0]}
   }
 

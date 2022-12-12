@@ -7,14 +7,13 @@
   "scripts": {
     "start": "node ./dist/index.js",
     "build": "tsc",
-    "dev": "nodemon ./src/index.ts"
+    "dev": "nodemon ./src/index.ts",
+    "dev-json": "json-server --watch ./src/test.json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async": "^3.2.4",
-    "async-mutex": "^0.3.2",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.2",

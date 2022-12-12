@@ -4,3 +4,6 @@ dist
 db.drawio
 db.json
 node_modules
+/src/db.ts
+/src/test.json
+/test

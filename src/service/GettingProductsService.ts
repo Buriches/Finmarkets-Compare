@@ -110,7 +110,12 @@ class GettingProductsService implements IGettingProductsService{
       const getArrCategories = async () =>{
         let arrCategories:string[] = []
         for(let j = 0; j < query.rows[i].categories?.length; j++){
-          arrCategories = [...arrCategories, (await CategoryService.getOne(query.rows[i].categories[j])).response]
+          const category = await CategoryService.getOne(query.rows[i].categories[j])
+          if (category.response === 'There is no category with this id') {
+            console.log('error with category:')
+            console.log(query.rows[i])
+          }
+          arrCategories.push(category.response)
         }
         return arrCategories
       }

@@ -14,11 +14,11 @@ class MarketService implements IMarketService{
     //checking if this store is already in our database
     let duplicate:boolean = false
     const all = (await this.getAll()).response
-    all.forEach((item:any)=>{
+    for(const item of all){
       if (item.name === name) {
         duplicate = true
       }
-    })
+    }
     if (duplicate) return {status: 404, response: 'This market is already in db'}
 
     //adding a new store

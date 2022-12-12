@@ -14,11 +14,11 @@ class MarketProductService implements IMarketProductService{
     //checking if this product-service is already in our database
     let duplicate = false
     const all = (await this.getAll()).response
-    all.forEach((item:{market_id:number, good_id:number})=>{
+    for(const item of all){
       if (item.market_id === body.market_id && item.good_id === body.good_id) {
         duplicate = true
       }
-    })
+    }
     if (duplicate) return  {status: 404, response: 'This product-service is already in db'}
 
     //adding a new product-service
