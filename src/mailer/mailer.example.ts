@@ -1,11 +1,12 @@
+export {}
 require('dotenv').config()
 const nodemailer = require('nodemailer')
 const { google } = require('googleapis')
 
-const CLIENT_ID = '986254037945-fdfie16pea41um1m6fjh424cdhf67rso.apps.googleusercontent.com'
-const CLIENT_SECRET = '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'
+const CLIENT_ID = 'example.apps.googleusercontent.com'
+const CLIENT_SECRET = 'example'
 const REDIRECT_URL = 'https://developers.google.com/oauthplayground'
-const REFRESH_TOKEN = '1//04QE1N8tWga0vCgYIARAAGAQSNwF-L9Ir7fPg51zUIOjdg-ra7wBMJhMTDBoGr07uYvFe7uhW6Y5THzZSAK_g6VPLGpw9fEcBUeQ'
+const REFRESH_TOKEN = 'example'
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL)
 oAuth2Client.setCredentials({refresh_token: REFRESH_TOKEN})
@@ -17,7 +18,7 @@ module.exports = async function sendEmail(to:string, code:string) {
       service: 'gmail',
       auth: {
         type: 'OAuth2',
-        user: '01121998kiril@gmail.com',
+        user: 'example@gmail.com',
         clientId: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
         refreshToken: REFRESH_TOKEN,
@@ -26,7 +27,7 @@ module.exports = async function sendEmail(to:string, code:string) {
     })
 
     const mailOptions = {
-      from: 'Activation code. No reply! <01121998kiril@gmail.com>',
+      from: 'Activation code. No reply! <example.gmail.com>',
       to: to,
       subject: 'Activation code',
       text: `Hello! Your activation code is ${code}`,

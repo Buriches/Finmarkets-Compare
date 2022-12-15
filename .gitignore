@@ -8,3 +8,4 @@ node_modules
 /src/test.json
 /test
 /src/config.ts
+/src/mailer/mailer.ts
