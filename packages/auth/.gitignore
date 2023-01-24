@@ -1,10 +1,5 @@
-.env
 .idea
 dist
-db.drawio
-node_modules
 /src/db.ts
-/src/test.json
-/test
 /src/config.ts
 /src/mailer/mailer.ts

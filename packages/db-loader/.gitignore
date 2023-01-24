@@ -1,0 +1,4 @@
+.env
+.idea
+dist
+/src/db.ts

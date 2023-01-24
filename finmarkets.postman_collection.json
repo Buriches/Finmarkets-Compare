@@ -1,0 +1,488 @@
+{
+	"info": {
+		"_postman_id": "22f0a944-d2c0-41c8-b5b8-f3ac08e58567",
+		"name": "finmarkets",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "upload",
+			"item": [
+				{
+					"name": "upload prisma",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{db-loader}}/upload/update-prisma",
+							"host": [
+								"{{db-loader}}"
+							],
+							"path": [
+								"upload",
+								"update-prisma"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload smarket",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{db-loader}}/upload/update-smarket",
+							"host": [
+								"{{db-loader}}"
+							],
+							"path": [
+								"upload",
+								"update-smarket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload herkku",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{db-loader}}/upload/update-herkku",
+							"host": [
+								"{{db-loader}}"
+							],
+							"path": [
+								"upload",
+								"update-herkku"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload alepa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{db-loader}}/upload/update-alepa",
+							"host": [
+								"{{db-loader}}"
+							],
+							"path": [
+								"upload",
+								"update-alepa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload sale",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{db-loader}}/upload/update-sale",
+							"host": [
+								"{{db-loader}}"
+							],
+							"path": [
+								"upload",
+								"update-sale"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload sokos-herkku",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{db-loader}}/upload/update-sokos-herkku",
+							"host": [
+								"{{db-loader}}"
+							],
+							"path": [
+								"upload",
+								"update-sokos-herkku"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload mestarin-herkku",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{db-loader}}/upload/update-mestarin-herkku",
+							"host": [
+								"{{db-loader}}"
+							],
+							"path": [
+								"upload",
+								"update-mestarin-herkku"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CRUD",
+			"item": [
+				{
+					"name": "get",
+					"item": [
+						{
+							"name": "get categories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{db-core}}/category/",
+									"host": [
+										"{{db-core}}"
+									],
+									"path": [
+										"category",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "create",
+					"item": [
+						{
+							"name": "create market",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Aboba\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{db-core}}/market/",
+									"host": [
+										"{{db-core}}"
+									],
+									"path": [
+										"market",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create category",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"aboba\",\r\n    \"path\": \"aboba\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{db-core}}/category/",
+									"host": [
+										"{{db-core}}"
+									],
+									"path": [
+										"category",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "for front",
+			"item": [
+				{
+					"name": "get main categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/get/getMainCategories/",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"get",
+								"getMainCategories",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get 24 products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/get/get24/:from",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"get",
+								"get24",
+								":from"
+							],
+							"variable": [
+								{
+									"key": "from",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get 24 products by category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"from\": 0,\r\n    \"category_id\": 168945\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/get/get24withCategory/",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"get",
+								"get24withCategory",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all products by name",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Burger\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/get/getProductsByName/",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"get",
+								"getProductsByName",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get under categories",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"path\": \"makeiset-ja-naposteltavat-1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/get/getUnderCategories/",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"get",
+								"getUnderCategories",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get product prices",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/get/getProductPrices/:good_id",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"get",
+								"getProductPrices",
+								":good_id"
+							],
+							"variable": [
+								{
+									"key": "good_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get same products",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test\",\r\n    \"email\": \"01121998kiril@gmail.com\",\r\n    \"password\": \"111111\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{auth}}/reg/registration",
+							"host": [
+								"{{auth}}"
+							],
+							"path": [
+								"reg",
+								"registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "confirm registration",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"wef\",\r\n    \"email\": \"01121998kiril@gmail.com\",\r\n    \"code\": \"9684\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{auth}}/reg/confirm-registration",
+							"host": [
+								"{{auth}}"
+							],
+							"path": [
+								"reg",
+								"confirm-registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"wef\",\r\n    \"password\": \"111111\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{auth}}/reg/login",
+							"host": [
+								"{{auth}}"
+							],
+							"path": [
+								"reg",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
