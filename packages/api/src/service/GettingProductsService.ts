@@ -75,6 +75,13 @@ class GettingProductsService implements IGettingProductsService{
     return {status: 200, response: query.rows}
   }
 
+  async getAllCategories(): Promise<IStatusResponse>{
+    const query = await db.query('select * from category')
+
+
+    return {status: 200, response: query.rows}
+  }
+
   async getProductPrices(good_id:number): Promise<IStatusResponse>{
     const query = await db.query(
       'select * from market_product ' +
