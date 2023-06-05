@@ -68,6 +68,7 @@ class GettingProductsService implements IGettingProductsService{
   async getProductPrices(good_id:number): Promise<IStatusResponse>{
     const query = await db.query(
       'select * from market_product ' +
+      'join markets on market_product.market_id = markets.market_id ' +
       'where good_id = $1;', [good_id]
     )
 
