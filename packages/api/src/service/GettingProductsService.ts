@@ -112,9 +112,15 @@ class GettingProductsService implements IGettingProductsService{
     return {status: 200, response: query}
   }
 
-  private addPrices = async (query:any) => {
-    let arr:{rows: number[]} = {rows: []}
-    for (let i = 0; i < query.rows.length; i++){
+  async getMarkets(): Promise<IStatusResponse>{
+    const query = await db.query('select * from markets')
+
+    return {status: 200, response: query.rows}
+  }
+
+  private addPrices = async (query: any) => {
+    const arr: { rows: number[] } = { rows: [] };
+    for (let i = 0; i < query.rows.length; i++) {
       const arrOfPrices = async () => {
         const productPrices = await this.getProductPrices(query.rows[i].good_id);
         return { ...query.rows[i], prices: productPrices.response };
