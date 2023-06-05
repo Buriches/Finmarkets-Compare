@@ -8,3 +8,4 @@ node_modules
 /test
 /src/config.ts
 /src/mailer/mailer.ts
+package-lock.json
