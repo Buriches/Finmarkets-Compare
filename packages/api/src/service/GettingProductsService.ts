@@ -39,6 +39,16 @@ class GettingProductsService implements IGettingProductsService{
     return {status: 200, response: await this.addFullCategories(await this.addPrices(query))}
   }
 
+  async get1ByPath(path:string): Promise<IStatusResponse>{
+
+    const query = await db.query(
+      'select * from unique_products ' +
+      'where path = $1', [path]
+    )
+
+    return {status: 200, response: await this.addFullCategories(await this.addPrices(query))}
+  }
+
   async getProductsByName(name:string): Promise<IStatusResponse>{
     const query = await db.query(
       'select * from unique_products ' +
