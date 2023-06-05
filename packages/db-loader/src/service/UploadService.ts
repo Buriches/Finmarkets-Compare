@@ -245,7 +245,7 @@ class UploadService{
   }
 
   queryForDownloadDataBase(limit:number, from:number, market:string|number){
-    return `https://cfapi.voikukka.fi/graphql?operationName=RemoteFilteredProducts&variables=%7B%22includeAvailabilities%22%3Afalse%2C%22availabilityDate%22%3A%22${this.nowDate()}%22%2C%22facets%22%3A%5B%7B%22key%22%3A%22brandName%22%2C%22order%22%3A%22asc%22%7D%2C%7B%22key%22%3A%22labels%22%7D%5D%2C%22includeAgeLimitedByAlcohol%22%3Atrue%2C%22limit%22%3A${limit}%2C%22queryString%22%3A%22%22%2C%22searchProvider%22%3A%22loop54%22%2C%22slug%22%3A%22%22%2C%22storeId%22%3A%22${market}%22%2C%22useRandomId%22%3Atrue%2C%22from%22%3A${from}%7D&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22f0b2e8b90476688a0cd6042877e0769dd8f7f6be3b34cbcb1f54e23a493b2c13%22%7D%7D`
+    return `https://cfapi.voikukka.fi/graphql?operationName=RemoteFilteredProducts&variables=%7B%22includeAvailabilities%22%3Afalse%2C%22availabilityDate%22%3A%22${this.nowDate()}%22%2C%22facets%22%3A%5B%7B%22key%22%3A%22brandName%22%2C%22order%22%3A%22asc%22%7D%2C%7B%22key%22%3A%22labels%22%7D%5D%2C%22generatedSessionId%22%3A%2218c1e719-19ad-44d4-b3d0-c3d0279466c3%22%2C%22includeAgeLimitedByAlcohol%22%3Atrue%2C%22limit%22%3A${limit}%2C%22queryString%22%3A%22%22%2C%22searchProvider%22%3A%22loop54%22%2C%22slug%22%3A%22%22%2C%22storeId%22%3A%22${market}%22%2C%22useRandomId%22%3Afalse%2C%22from%22%3A${from}%7D&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%2282d59a54ea6c6e151f843b9d091d0e94ba79665fbefa0a6280bbc797cacfb63c%22%7D%7D`
   }
 
   nowDate(){
