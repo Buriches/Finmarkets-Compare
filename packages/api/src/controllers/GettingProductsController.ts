@@ -12,9 +12,9 @@ interface IGettingProductsController{
 
 class GettingProductsController implements IGettingProductsController{
 
-  async get24(req:{params:{from:number}}, res: any){
+  async get24(req:{query: {from: number}}, res: any){
     try {
-      const {status, response} = await gettingProductsService.get24(req.params.from)
+      const {status, response} = await gettingProductsService.get24(req.query.from)
       res.status(status).json(response)
     } catch (e) {
       console.log(e)
@@ -22,9 +22,19 @@ class GettingProductsController implements IGettingProductsController{
     }
   }
 
-  async get24withCategory(req:{body:{from:number, category_id:number}}, res:any){
+  async get24withCategory(req:{query:{from:number, category_id:number}}, res:any){
     try {
-      const {status, response} = await gettingProductsService.get24withCategory(req.body.from, req.body.category_id)
+      const {status, response} = await gettingProductsService.get24withCategory(req.query.from, req.query.category_id)
+      res.status(status).json(response)
+    } catch (e) {
+      console.log(e)
+      res.status(500).json(e)
+    }
+  }
+
+  async get1ByPath(req:{query:{path:string}}, res:any){
+    try {
+      const {status, response} = await gettingProductsService.get1ByPath(req.query.path)
       res.status(status).json(response)
     } catch (e) {
       console.log(e)
@@ -52,9 +62,19 @@ class GettingProductsController implements IGettingProductsController{
     }
   }
 
-  async getUnderCategories(req:{body:{path:string}}, res:any){
+  async getUnderCategories(req:{ query: { path: string } }, res:any){
     try {
-      const {status, response} = await gettingProductsService.getUnderCategories(req.body.path)
+      const {status, response} = await gettingProductsService.getUnderCategories(req.query.path)
+      res.status(status).json(response)
+    } catch (e) {
+      console.log(e)
+      res.status(500).json(e)
+    }
+  }
+
+  async getAllCategories(req:any, res:any){
+    try {
+      const {status, response} = await gettingProductsService.getAllCategories()
       res.status(status).json(response)
     } catch (e) {
       console.log(e)
@@ -82,6 +102,15 @@ class GettingProductsController implements IGettingProductsController{
     }
   }
 
+  async getMarkets(req: any, res:any){
+    try {
+      const {status, response} = await gettingProductsService.getMarkets();
+      res.status(status).json(response)
+    } catch (e) {
+      console.log(e)
+      res.status(500).json(e)
+    }
+  }
 }
 
 module.exports = new GettingProductsController()
