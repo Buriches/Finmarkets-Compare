@@ -237,7 +237,11 @@ class UploadService{
   }
 
   async uploadQuery(limit:number, from:number, market:string|number){
-    return await axios.get(this.queryForDownloadDataBase(limit, from, market))
+    return await axios.get(this.queryForDownloadDataBase(limit, from, market), {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
   }
 
   queryForDownloadDataBase(limit:number, from:number, market:string|number){
