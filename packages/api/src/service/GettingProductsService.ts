@@ -99,34 +99,34 @@ class GettingProductsService implements IGettingProductsService{
     let arr:{rows: number[]} = {rows: []}
     for (let i = 0; i < query.rows.length; i++){
       const arrOfPrices = async () => {
-        return {...query.rows[i], prices: (await new GettingProductsService().getProductPrices(query.rows[i].good_id)).response}
-      }
-      arr.rows.push(await arrOfPrices())
+        const productPrices = await this.getProductPrices(query.rows[i].good_id);
+        return { ...query.rows[i], prices: productPrices.response };
+      };
+      arr.rows.push(await arrOfPrices());
     }
-    return arr
-  }
+    return arr;
+  };
 
-  private addFullCategories = async (query:any) => {
-    let arrOutput = []
-    for (let i = 0; i < query.rows?.length; i++){
-      const getArrCategories = async () =>{
-        let arrCategories:string[] = []
-        for(let j = 0; j < query.rows[i].categories?.length; j++){
-          const category = await CategoryService.getOne(query.rows[i].categories[j])
+  private addFullCategories = async (query: any) => {
+    const arrOutput: any[] = [];
+    for (let i = 0; i < query.rows?.length; i++) {
+      const getArrCategories = async () => {
+        const arrCategories: string[] = [];
+        for (let j = 0; j < query.rows[i].categories?.length; j++) {
+          const category = await CategoryService.getOne(query.rows[i].categories[j]);
           if (category.response === 'There is no category with this id') {
-            console.log('error with category:')
-            console.log(query.rows[i])
+            console.log('error with category:');
+            console.log(query.rows[i]);
           }
-          arrCategories.push(category.response)
+          arrCategories.push(category.response);
         }
-        return arrCategories
-      }
-      const output = {...query.rows[i], categories: await getArrCategories()}
-      arrOutput.push(output)
+        return arrCategories;
+      };
+      const output = { ...query.rows[i], categories: await getArrCategories() };
+      arrOutput.push(output);
     }
-    return arrOutput
-  }
-
+    return arrOutput;
+  };
 }
 
 module.exports = new GettingProductsService()
