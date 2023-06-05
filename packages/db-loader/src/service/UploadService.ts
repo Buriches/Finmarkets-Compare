@@ -1,5 +1,6 @@
 const axios = require('axios')
 import {IStatusResponse} from "@finmarkets/db-core/src/types";
+import { decodeMarket } from "@finmarkets/utils";
 
 const UniqueProductService = require('@finmarkets/db-core/src/service/UniqueProductService')
 const CategoryService = require('@finmarkets/db-core/src/service/CategoryService')
@@ -20,7 +21,7 @@ class UploadService{
 
   async updatePrisma(): Promise<IStatusResponse>{
     try {
-      const market = this.decodeMarket('prisma')
+      const market = decodeMarket('prisma')
       await this.updateLogic(market)
       return {status: 200, response: "prisma finished"}
     } finally {
@@ -30,7 +31,7 @@ class UploadService{
 
   async updateSmarket(): Promise<IStatusResponse>{
     try {
-      const market = this.decodeMarket('s-market')
+      const market = decodeMarket('s-market')
         await this.updateLogic(market)
     } finally {
       console.log('Download is finished. Database is currently being loaded')
@@ -40,7 +41,7 @@ class UploadService{
 
   async updateHerkku(): Promise<IStatusResponse>{
     try {
-      await this.updateLogic(this.decodeMarket('herkku'))
+      await this.updateLogic(decodeMarket('herkku'))
     } finally {
       console.log('Download is finished. Database is currently being loaded')
     }
@@ -49,7 +50,7 @@ class UploadService{
 
   async updateAlepa(): Promise<IStatusResponse>{
     try {
-      await this.updateLogic(this.decodeMarket('alepa'))
+      await this.updateLogic(decodeMarket('alepa'))
     } finally {
       console.log('Download is finished. Database is currently being loaded')
     }
@@ -58,7 +59,7 @@ class UploadService{
 
   async updateSale(): Promise<IStatusResponse>{
     try {
-      const market = this.decodeMarket('sale')
+      const market = decodeMarket('sale')
       await this.updateLogic(market)
     } finally {
       console.log('Download is finished. Database is currently being loaded')
@@ -68,7 +69,7 @@ class UploadService{
 
   async updateSokosHerkku(): Promise<IStatusResponse>{
     try {
-      await this.updateLogic(this.decodeMarket('sokos-herkku'))
+      await this.updateLogic(decodeMarket('sokos-herkku'))
     } finally {
       console.log('Download is finished. Database is currently being loaded')
     }
@@ -77,7 +78,7 @@ class UploadService{
 
   async updateMestarinHerkku(): Promise<IStatusResponse>{
     try {
-      await this.updateLogic(this.decodeMarket('mestarin-herkku'))
+      await this.updateLogic(decodeMarket('mestarin-herkku'))
     } finally {
       console.log('Download is finished. Database is currently being loaded')
     }
@@ -183,7 +184,7 @@ class UploadService{
 
   private async updateMarket(market:string|number){
 
-    const query = await MarketService.getOneByName(this.decodeMarket(market))
+    const query = await MarketService.getOneByName(decodeMarket(market))
     if (query?.response.market_id) return query.response.market_id
     return 999
 
@@ -252,33 +253,6 @@ class UploadService{
     if (String(date).length === 2) return date
     if (String(date).length === 1) return "0" + date
     else return "00"
-  }
-
-  decodeMarket(acquiredInformation: string|number){
-    if (typeof acquiredInformation === "number"){
-      switch (acquiredInformation){
-        case acquiredInformation = 513971200: return 'prisma'
-        case acquiredInformation = 725814659: return 's-market'
-        case acquiredInformation = 720571157: return 'herkku'
-        case acquiredInformation = 708268115: return 'alepa'
-        case acquiredInformation = 725782447: return 'sale'
-        case acquiredInformation = 542854294: return 'sokos-herkku'
-        case acquiredInformation = 519684690: return 'mestarin-herkku'
-      }
-    }
-    if (typeof acquiredInformation === "string"){
-      switch (acquiredInformation){
-        case acquiredInformation = 'prisma': return 513971200
-        case acquiredInformation = 's-market': return 725814659
-        case acquiredInformation = 'herkku': return 720571157
-        case acquiredInformation = 'alepa': return 708268115
-        case acquiredInformation = 'sale': return 725782447
-        case acquiredInformation = 'sokos-herkku': return 542854294
-        case acquiredInformation = 'mestarin-herkku': return 519684690
-      }
-    }
-    console.log('ERROR MARKET NAME')
-    return 'error'
   }
 }
 
